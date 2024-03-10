@@ -1,7 +1,16 @@
+using CatalogoMVC.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddHttpClient("CategoriasApi", c =>
+{
+    c.BaseAddress = new Uri(builder.Configuration["ServiceUri2:CategoriasApi"]);
+});
+
+builder.Services.AddScoped<ICategoriaService, CategoriaService>();
 
 var app = builder.Build();
 
