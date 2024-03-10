@@ -1,8 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Xml.Linq;
 
 namespace CatalogoMVC.Models;
 
-public class CategoriasMvc
+public class CategoriaViewModel
 {
     public int CategoriaId { get; set; }
 
