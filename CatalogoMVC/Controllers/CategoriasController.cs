@@ -1,6 +1,7 @@
 ﻿using CatalogoMVC.Models;
 using CatalogoMVC.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace CatalogoMVC.Controllers;
 
@@ -37,6 +38,16 @@ public class CategoriasController : Controller
         ViewBag.Erro = "Erro ao criar categoria";
 
         return View(categoriaVM);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> AtualizarCategoria(int id)
+    {
+        var result = await _categoriaService.GetCategoriaById(id);
+
+        if (result is null) return View("Error");
+
+        return View(result);
     }
 }
 
