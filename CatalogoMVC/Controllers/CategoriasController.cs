@@ -18,5 +18,25 @@ public class CategoriasController : Controller
 
         return View(result);
     }
+
+    [HttpGet]
+    public IActionResult CriarNovaCategoria()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    public async Task<ActionResult<CategoriaViewModel>> CriarNovaCategoria(CategoriaViewModel categoriaVM)
+    {
+        if (ModelState.IsValid)
+        {
+            var result = await _categoriaService.CreateCategoria(categoriaVM);
+            if (result is not null) return RedirectToAction(nameof(Index));
+        }
+
+        ViewBag.Erro = "Erro ao criar categoria";
+
+        return View(categoriaVM);
+    }
 }
 
