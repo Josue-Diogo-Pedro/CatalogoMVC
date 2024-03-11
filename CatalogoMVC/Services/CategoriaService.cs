@@ -66,7 +66,7 @@ public class CategoriaService : ICategoriaService
         var categoria = JsonSerializer.Serialize(categoriaVM);
         StringContent content = new StringContent(categoria, Encoding.UTF8, "application/json");
 
-        using (var response = await client.PostAsJsonAsync(apiEndpoint, content))
+        using (var response = await client.PostAsync(apiEndpoint, content))
         {
             if (response.IsSuccessStatusCode)
             {
