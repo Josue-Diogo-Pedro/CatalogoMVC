@@ -49,5 +49,19 @@ public class CategoriasController : Controller
 
         return View(result);
     }
+
+    [HttpPost]
+    public async Task<ActionResult<CategoriaViewModel>> AtualizarCategoria(int id, CategoriaViewModel categoriaVM)
+    {
+        if (ModelState.IsValid)
+        {
+            var result = await _categoriaService.UpdateCategoria(id, categoriaVM);
+
+            if (result) return RedirectToAction(nameof(Index));
+        }
+
+        ViewBag.Erro = "Erro ao actualizar Categoria";
+        return View(categoriaVM);
+    }
 }
 
