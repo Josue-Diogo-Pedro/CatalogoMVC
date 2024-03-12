@@ -7,7 +7,7 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddHttpClient("CategoriasApi", c =>
 {
-    c.BaseAddress = new Uri(builder.Configuration["ServiceUri:CategoriasApi"]);
+    c.BaseAddress = new Uri(builder.Configuration["ServiceUri2:CategoriasApi"]);
 });
 
 builder.Services.AddScoped<ICategoriaService, CategoriaService>();
