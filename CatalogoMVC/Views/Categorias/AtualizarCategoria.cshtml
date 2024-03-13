@@ -35,5 +35,9 @@
         <input type="submit" value="Salvar" class="btn btn-primary" />
         <a asp-action="Index" class="btn btn-info">Retornar</a>
     </div>
-
+    @if(ViewBag.Erro is not null){
+        <div style="color:red;">
+            <h4>@ViewBag.Erro</h4>
+        </div>
+    }
 </form>

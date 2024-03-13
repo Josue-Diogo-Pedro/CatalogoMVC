@@ -6,7 +6,7 @@ namespace CatalogoMVC.Services;
 
 public class CategoriaService : ICategoriaService
 {
-    private const string apiEndpoint = "/api/categorias";
+    private const string apiEndpoint = "/api/categorias/";
 
     private readonly JsonSerializerOptions _options;
     private readonly IHttpClientFactory _clientFactory;
@@ -84,8 +84,13 @@ public class CategoriaService : ICategoriaService
     public async Task<bool> UpdateCategoria(int id, CategoriaViewModel categoriaVM)
     {
         var client = _clientFactory.CreateClient("CategoriasApi");
+        var categoria = JsonSerializer.Serialize(categoriaVM);
+        StringContent content = new StringContent(categoria, Encoding.UTF8, "application/json");
 
-        using(var response = await client.PutAsJsonAsync(apiEndpoint+id, categoriaVM))
+        var endpointFinal = apiEndpoint.Remove(apiEndpoint.Length - 1);
+        endpointFinal = endpointFinal + "?id=" + id;
+
+        using (var response = await client.PutAsJsonAsync(endpointFinal, categoriaVM))
         {
             if (response.IsSuccessStatusCode) return true;
             else return false;
