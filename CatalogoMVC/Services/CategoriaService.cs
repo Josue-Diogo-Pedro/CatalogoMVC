@@ -84,9 +84,7 @@ public class CategoriaService : ICategoriaService
     public async Task<bool> UpdateCategoria(int id, CategoriaViewModel categoriaVM)
     {
         var client = _clientFactory.CreateClient("CategoriasApi");
-        var categoria = JsonSerializer.Serialize(categoriaVM);
-        StringContent content = new StringContent(categoria, Encoding.UTF8, "application/json");
-
+        
         var endpointFinal = apiEndpoint.Remove(apiEndpoint.Length - 1);
         endpointFinal = endpointFinal + "?id=" + id;
 

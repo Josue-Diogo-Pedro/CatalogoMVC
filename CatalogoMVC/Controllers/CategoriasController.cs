@@ -63,5 +63,18 @@ public class CategoriasController : Controller
         ViewBag.Erro = "Erro ao actualizar Categoria";
         return View(categoriaVM);
     }
+
+    [HttpGet]
+    public async Task<ActionResult> DeletarCategoria(int id)
+    {
+        var categoria = await _categoriaService.GetCategoriaById(id);
+
+        if (categoria is null) return View("Error");
+
+        return View(categoria);
+    }
+
+
+
 }
 
