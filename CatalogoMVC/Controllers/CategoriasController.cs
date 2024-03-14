@@ -67,14 +67,22 @@ public class CategoriasController : Controller
     [HttpGet]
     public async Task<ActionResult> DeletarCategoria(int id)
     {
-        var categoria = await _categoriaService.GetCategoriaById(id);
+        var result = await _categoriaService.GetCategoriaById(id);
 
-        if (categoria is null) return View("Error");
+        if (result is null) return View("Error");
 
-        return View(categoria);
+        return View(result);
     }
 
+    [HttpPost(), ActionName("DeletarCategoria")]
+    public async Task<ActionResult> DeletaConfirmado(int id)
+    {
+        var result = await _categoriaService.RemoveCategoria(id);
 
+        if(result) return RedirectToAction(nameof(Index));
+
+        return View("Error");
+    }
 
 }
 
