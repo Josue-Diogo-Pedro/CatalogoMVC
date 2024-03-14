@@ -1,7 +1,6 @@
 ﻿using CatalogoMVC.Models;
 using CatalogoMVC.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace CatalogoMVC.Controllers;
 
@@ -21,10 +20,7 @@ public class CategoriasController : Controller
     }
 
     [HttpGet]
-    public IActionResult CriarNovaCategoria()
-    {
-        return View();
-    }
+    public IActionResult CriarNovaCategoria() => View();
 
     [HttpPost]
     public async Task<ActionResult<CategoriaViewModel>> CriarNovaCategoria(CategoriaViewModel categoriaVM)
@@ -79,7 +75,7 @@ public class CategoriasController : Controller
     {
         var result = await _categoriaService.RemoveCategoria(id);
 
-        if(result) return RedirectToAction(nameof(Index));
+        if (result) return RedirectToAction(nameof(Index));
 
         return View("Error");
     }
