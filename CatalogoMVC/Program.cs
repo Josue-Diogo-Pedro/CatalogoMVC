@@ -1,4 +1,5 @@
 using CatalogoMVC.Services;
+using System.Net.Http.Headers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +10,14 @@ builder.Services.AddHttpClient("CategoriasApi", c =>
 {
     c.BaseAddress = new Uri(builder.Configuration["ServiceUri2:CategoriasApi"]);
 });
+
+builder.Services.AddHttpClient("AutenticaApi", c =>
+{
+    c.BaseAddress = new Uri(builder.Configuration["ServiceUri2:AutenticaApi"]);
+    c.DefaultRequestHeaders.Accept.Clear();
+    c.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+});
+
 
 builder.Services.AddScoped<ICategoriaService, CategoriaService>();
 
