@@ -1,11 +1,41 @@
 ﻿using CatalogoMVC.Models;
+using System.Text;
+using System.Text.Json;
 
 namespace CatalogoMVC.Services;
 
 public class Autenticacao : IAutenticacao
 {
-    public Task<TokenViewModel> AutenticaUsuario(UsuarioViewModel usuarioVM)
+    private readonly IHttpClientFactory _clientFactory;
+    const string apiEndPointAutentica = "/api/autoriza/login";
+    private readonly JsonSerializerOptions _options;
+    private TokenViewModel tokenUsuario;
+
+    public Autenticacao(IHttpClientFactory clientFactory)
     {
-        throw new NotImplementedException();
+        _clientFactory = clientFactory;
+        _options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+    }
+
+    public async Task<TokenViewModel> AutenticaUsuario(UsuarioViewModel usuarioVM)
+    {
+        var client = _clientFactory.CreateClient("AutenticaApi");
+        var usuario = JsonSerializer.Serialize(usuarioVM);
+        StringContent content = new StringContent(usuario, Encoding.UTF8, "application/json");
+
+        using(var response = await client.PostAsync(apiEndPointAutentica, content))
+        {
+            if (response.IsSuccessStatusCode)
+            {
+                var apiResponse = await response.Content.ReadAsStreamAsync();
+                tokenUsuario = await JsonSerializer.DeserializeAsync<TokenViewModel>(apiResponse, _options);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        return tokenUsuario;
     }
 }
