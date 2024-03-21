@@ -7,6 +7,7 @@ public class ProdutosController : Controller
 {
     private readonly ICategoriaService _categoriaService;
     private readonly IProdutoService _produtoService;
+    private string token = string.Empty;
 
     public ProdutosController(ICategoriaService categoriaService, IProdutoService produtoService)
     {
@@ -17,5 +18,13 @@ public class ProdutosController : Controller
     public IActionResult Index()
     {
         return View();
+    }
+
+    private string ObtemToken()
+    {
+        if (HttpContext.Request.Cookies.ContainsKey("X-Access-Token"))
+            token = HttpContext.Request.Cookies["X-Access-Token"].ToString();
+
+        return token;
     }
 }
