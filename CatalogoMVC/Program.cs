@@ -25,6 +25,7 @@ builder.Services.AddHttpClient("AutenticaApi", c =>
 
 
 builder.Services.AddScoped<ICategoriaService, CategoriaService>();
+builder.Services.AddScoped<IProdutoService, ProdutoService>();
 builder.Services.AddScoped<IAutenticacao, Autenticacao>();
 
 var app = builder.Build();
