@@ -96,9 +96,16 @@ public class ProdutoService : IProdutoService
         }
     }
 
-    public Task<bool> RemoveProduto(int id, string token)
+    public async Task<bool> RemoveProduto(int id, string token)
     {
-        throw new NotImplementedException();
+        var client = _clientFactory.CreateClient("ProdutosApi");
+        PutTokenInHeaderAuthorization(token, client);
+
+        using(var response = await client.DeleteAsync(apiEndpoint + id))
+        {
+            if (response.IsSuccessStatusCode) return true;
+            else return false;
+        }
     }
 
     private static void PutTokenInHeaderAuthorization(string token, HttpClient client)
