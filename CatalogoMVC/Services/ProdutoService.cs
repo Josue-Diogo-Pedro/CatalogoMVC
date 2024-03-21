@@ -1,5 +1,6 @@
 ﻿using CatalogoMVC.Models;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Text.Json;
 
 namespace CatalogoMVC.Services;
@@ -58,9 +59,26 @@ public class ProdutoService : IProdutoService
         return _produtoVM;
     }
 
-    public Task<ProdutoViewModel> CreateProduto(ProdutoViewModel produtoVM, string token)
+    public async Task<ProdutoViewModel> CreateProduto(ProdutoViewModel produtoVM, string token)
     {
-        throw new NotImplementedException();
+        var client = _clientFactory.CreateClient("ProdutosApi");
+        PutTokenInHeaderAuthorization(token, client);
+
+        var produto = JsonSerializer.Serialize(produtoVM);
+        StringContent content = new StringContent(produto, Encoding.UTF8, "application/json");
+
+        using(var response = await client.PostAsync(apiEndpoint, content))
+        {
+            if (response.IsSuccessStatusCode)
+            {
+                var apiResponse = await response.Content.ReadAsStreamAsync();
+                _produtoVM = await JsonSerializer
+                                   .DeserializeAsync<ProdutoViewModel>
+                                   (apiResponse, _options);
+            }
+            else return null;
+        }
+        return _produtoVM;
     }
 
     public Task<bool> UpdateProduto(int id, ProdutoViewModel produtoVM, string token)
