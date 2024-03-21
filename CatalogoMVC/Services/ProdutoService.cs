@@ -6,9 +6,11 @@ namespace CatalogoMVC.Services;
 
 public class ProdutoService : IProdutoService
 {
+    private const string apiEndpoint = "/api/produtos/";
+
     private readonly IHttpClientFactory _clientFactory;
-    private const string apiEndpoint = "api/produtos/";
     private readonly JsonSerializerOptions _options;
+
     private ProdutoViewModel _produtoVM;
     private IEnumerable<ProdutoViewModel> _produtosVM;
 
@@ -18,9 +20,23 @@ public class ProdutoService : IProdutoService
         _options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
     }
 
-    public Task<IEnumerable<ProdutoViewModel>> GetProdutos(string token)
+    public async Task<IEnumerable<ProdutoViewModel>> GetProdutos(string token)
     {
-        throw new NotImplementedException();
+        var client = _clientFactory.CreateClient("ProdutosApi");
+        PutTokenInHeaderAuthorization(token, client);
+
+        using(var response = await client.GetAsync(apiEndpoint))
+        {
+            if (response.IsSuccessStatusCode)
+            {
+                var apiResponse = await response.Content.ReadAsStreamAsync();
+                _produtosVM = await JsonSerializer
+                    .DeserializeAsync<IEnumerable<ProdutoViewModel>>
+                    (apiResponse, _options);
+            }
+            else return null;
+        }
+        return _produtosVM;
     }
 
     public Task<ProdutoViewModel> GetProdutoPorId(int id, string token)
