@@ -39,9 +39,23 @@ public class ProdutoService : IProdutoService
         return _produtosVM;
     }
 
-    public Task<ProdutoViewModel> GetProdutoPorId(int id, string token)
+    public async Task<ProdutoViewModel> GetProdutoPorId(int id, string token)
     {
-        throw new NotImplementedException();
+        var client = _clientFactory.CreateClient("ProdutosApi");
+        PutTokenInHeaderAuthorization(token, client);
+
+        using(var response = await client.GetAsync(apiEndpoint + id))
+        {
+            if (response.IsSuccessStatusCode)
+            {
+                var apiResponse = await response.Content.ReadAsStreamAsync();
+                _produtoVM = await JsonSerializer
+                    .DeserializeAsync<ProdutoViewModel>
+                    (apiResponse, _options);
+            }
+            else return null;
+        }
+        return _produtoVM;
     }
 
     public Task<ProdutoViewModel> CreateProduto(ProdutoViewModel produtoVM, string token)
