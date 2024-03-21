@@ -81,9 +81,19 @@ public class ProdutoService : IProdutoService
         return _produtoVM;
     }
 
-    public Task<bool> UpdateProduto(int id, ProdutoViewModel produtoVM, string token)
+    public async Task<bool> UpdateProduto(int id, ProdutoViewModel produtoVM, string token)
     {
-        throw new NotImplementedException();
+        var client = _clientFactory.CreateClient("ProdutosApi");
+        PutTokenInHeaderAuthorization(token, client);
+
+        var endpointFinal = apiEndpoint.Remove(apiEndpoint.Length - 1);
+        endpointFinal = endpointFinal + "?id=" + id;
+
+        using(var response = await client.PutAsJsonAsync(endpointFinal, produtoVM))
+        {
+            if (response.IsSuccessStatusCode) return true;
+            else return false;
+        }
     }
 
     public Task<bool> RemoveProduto(int id, string token)
