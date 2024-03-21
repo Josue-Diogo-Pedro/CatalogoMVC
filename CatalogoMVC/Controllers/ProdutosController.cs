@@ -50,6 +50,16 @@ public class ProdutosController : Controller
         return View(produtoVM);
     }
 
+    [HttpGet]
+    public async Task<ActionResult<ProdutoViewModel>> DetalhesProduto(int id)
+    {
+        var produto = await _produtoService.GetProdutoPorId(id, ObtemToken());
+
+        if (produto is null) return View("Error");
+
+        return View(produto);
+    }
+
     private string ObtemToken()
     {
         if (HttpContext.Request.Cookies.ContainsKey("X-Access-Token"))
