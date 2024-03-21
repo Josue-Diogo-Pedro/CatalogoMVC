@@ -1,4 +1,5 @@
 ﻿using CatalogoMVC.Models;
+using System.Net.Http.Headers;
 using System.Text.Json;
 
 namespace CatalogoMVC.Services;
@@ -40,5 +41,10 @@ public class ProdutoService : IProdutoService
     public Task<bool> RemoveProduto(int id, string token)
     {
         throw new NotImplementedException();
+    }
+
+    private static void PutTokenInHeaderAuthorization(string token, HttpClient client)
+    {
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
     }
 }
