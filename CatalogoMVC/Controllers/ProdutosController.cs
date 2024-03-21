@@ -1,4 +1,5 @@
-﻿using CatalogoMVC.Services;
+﻿using CatalogoMVC.Models;
+using CatalogoMVC.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CatalogoMVC.Controllers;
@@ -15,9 +16,12 @@ public class ProdutosController : Controller
         _produtoService = produtoService;
     }
 
-    public IActionResult Index()
+    public async Task<ActionResult<IEnumerable<ProdutoViewModel>>> Index()
     {
-        return View();
+        var result = await _produtoService.GetProdutos(ObtemToken());
+
+        if (result is null) return View("Error");
+        else return View(result);
     }
 
     private string ObtemToken()
