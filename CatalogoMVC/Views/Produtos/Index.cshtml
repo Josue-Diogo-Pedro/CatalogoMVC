@@ -18,4 +18,58 @@
 <br />
 
 <div class="panel panel-default">
+
+    <table class="table table-striped">
+        
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(p => p.Nome)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(p => p.Descricao)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(p => p.Preco)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(p => p.ImagemUrl)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var produto in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(model => produto.Nome)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => produto.Descricao)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => produto.Preco)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => produto.ImagemUrl)
+                    </td>
+                    <td>
+                        <a asp-action="AtualizarProduto" asp-route-id="@produto.ProdutoId" title="Editar" class="btn btn-warning">
+                            <span class="fas fa-edit"></span>
+                        </a>
+                        <a asp-action="DeletarProduto" asp-route-id="@produto.ProdutoId" title="Deletar" class="btn btn-danger">
+                            <span class="fas fa-trash-alt"></span>
+                        </a>
+                        <a asp-action="DetalhesProduto" asp-route-id="@produto.ProdutoId" title="Detalhes" class="btn btn-info">
+                            <span class="fas fa-check"></span>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+
 </div>
