@@ -3,7 +3,7 @@ using System.Text.Json;
 
 namespace CatalogoMVC.Services;
 
-public class ProdutoService
+public class ProdutoService : IProdutoService
 {
     private readonly IHttpClientFactory _clientFactory;
     private const string apiEndpoint = "api/produtos/";
@@ -17,5 +17,28 @@ public class ProdutoService
         _options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
     }
 
+    public Task<IEnumerable<ProdutoViewModel>> GetProdutos(string token)
+    {
+        throw new NotImplementedException();
+    }
 
+    public Task<ProdutoViewModel> GetProdutoPorId(int id, string token)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<ProdutoViewModel> CreateProduto(ProdutoViewModel produtoVM, string token)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<bool> UpdateProduto(int id, ProdutoViewModel produtoVM, string token)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<bool> RemoveProduto(int id, string token)
+    {
+        throw new NotImplementedException();
+    }
 }
