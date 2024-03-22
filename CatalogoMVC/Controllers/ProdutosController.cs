@@ -85,6 +85,15 @@ public class ProdutosController : Controller
         return View("Error");
     }
 
+    [HttpGet]
+    public async Task<ActionResult<ProdutoViewModel>> DeletarProduto(int id)
+    {
+        var produto = await _produtoService.GetProdutoPorId(id, ObtemToken());
+
+        if (produto is null) return View("Error");
+        else return View(produto);
+    }
+
     private string ObtemToken()
     {
         if (HttpContext.Request.Cookies.ContainsKey("X-Access-Token"))
