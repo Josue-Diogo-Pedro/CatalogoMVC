@@ -2,6 +2,7 @@
 using CatalogoMVC.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewEngines;
 
 namespace CatalogoMVC.Controllers;
 
@@ -56,6 +57,18 @@ public class ProdutosController : Controller
         var produto = await _produtoService.GetProdutoPorId(id, ObtemToken());
 
         if (produto is null) return View("Error");
+
+        return View(produto);
+    }
+
+    [HttpGet]
+    public async Task<ActionResult<ProdutoViewModel>> AtualizarProduto(int id)
+    {
+        var produto = await _produtoService.GetProdutoPorId(id, ObtemToken());
+
+        if(produto is null) return View("Error");
+
+        ViewBag.CategoriaId = new SelectList(await _categoriaService.GetCategorias(), "CategoriaId", "Nome");
 
         return View(produto);
     }
