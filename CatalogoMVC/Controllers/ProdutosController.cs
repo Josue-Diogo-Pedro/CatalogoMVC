@@ -2,7 +2,6 @@
 using CatalogoMVC.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Mvc.ViewEngines;
 
 namespace CatalogoMVC.Controllers;
 
@@ -43,7 +42,7 @@ public class ProdutosController : Controller
         {
             var result = await _produtoService.CreateProduto(produtoVM, ObtemToken());
 
-            if(result  is not null) return RedirectToAction(nameof(Index));
+            if (result is not null) return RedirectToAction(nameof(Index));
 
         }
         else ViewBag.CategoriaId = new SelectList(await _categoriaService.GetCategorias(), "CategoriaId", "Nome");
@@ -66,11 +65,24 @@ public class ProdutosController : Controller
     {
         var produto = await _produtoService.GetProdutoPorId(id, ObtemToken());
 
-        if(produto is null) return View("Error");
+        if (produto is null) return View("Error");
 
         ViewBag.CategoriaId = new SelectList(await _categoriaService.GetCategorias(), "CategoriaId", "Nome");
 
         return View(produto);
+    }
+
+    [HttpPost]
+    public async Task<ActionResult> AtualizarProduto(int id, ProdutoViewModel produtoVM)
+    {
+        if (ModelState.IsValid)
+        {
+            var result = await _produtoService.UpdateProduto(id, produtoVM, ObtemToken());
+
+            if (result) return RedirectToAction(nameof(Index));
+        }
+
+        return View("Error");
     }
 
     private string ObtemToken()
